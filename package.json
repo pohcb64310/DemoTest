@@ -1,0 +1,11 @@
+{
+  "name": "snip-backend",
+  "version": "1.0.0",
+  "description": "Tiny URL shortener backend powered by Bun",
+  "scripts": {
+    "start": "bun run server.js"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}
