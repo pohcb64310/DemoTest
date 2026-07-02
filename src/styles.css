@@ -1,1 +1,64 @@
-/* You can add global styles to this file, and also import other style files */
+/* ─────────────────────────────────────────────────────────
+   Snip — global design tokens  (see design.md for rationale)
+   ───────────────────────────────────────────────────────── */
+:root {
+  /* Background layers */
+  --bg-base:       #0C0B0F;
+  --bg-surface:    #141219;
+  --bg-elevated:   #1C1A23;
+
+  /* Text */
+  --text-primary:  #F4F0EC;
+  --text-muted:    #7A7688;
+  --text-dim:      #4A4856;
+
+  /* Accent gradient  coral → hot-pink → orange */
+  --accent:        linear-gradient(135deg, #FF5E57 0%, #F02D8A 50%, #FF8040 100%);
+  --glow-bg:       radial-gradient(ellipse 90% 55% at 50% 0%,
+                     rgba(240,45,138,0.22) 0%,
+                     rgba(255,94,87,0.15) 40%,
+                     transparent 70%);
+  --glow-btn:      0 0 24px rgba(240,45,138,0.50), 0 2px 8px rgba(255,94,87,0.40);
+
+  /* Borders & shadows */
+  --border:        rgba(255,255,255,0.07);
+  --border-focus:  rgba(240,45,138,0.45);
+  --shadow-card:   0 1px 0 rgba(255,255,255,0.04), 0 8px 32px rgba(0,0,0,0.50);
+
+  /* Border radii */
+  --radius-card:   20px;
+  --radius-input:  16px;
+  --radius-btn:    10px;
+  --radius-pill:   9999px;
+
+  /* Spacing */
+  --space-xs:   0.5rem;
+  --space-sm:   0.875rem;
+  --space-md:   1.5rem;
+  --space-lg:   2.5rem;
+  --space-xl:   4rem;
+
+  /* Type */
+  --font:       'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --text-xs:    0.75rem;
+  --text-sm:    0.875rem;
+  --text-base:  1rem;
+  --text-lg:    1.125rem;
+  --text-hero:  clamp(2.25rem, 5vw, 3.5rem);
+}
+
+/* ─── Reset ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; text-decoration: none; }
