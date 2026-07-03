@@ -1,0 +1,11 @@
+{
+  "name": "snip-bundle",
+  "version": "1.0.0",
+  "description": "Snip — assembled backend + frontend + CLI (generated, do not edit)",
+  "scripts": {
+    "start": "bun server.js"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}
