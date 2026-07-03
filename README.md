@@ -7,7 +7,49 @@ orphan branch of this repository and composed here as git submodules.
 snip-demo (main)
 ├── backend/    ← Bun server          (branch: backend)
 ├── frontend/   ← Angular 19 SPA      (branch: frontend)
-└── cli/        ← Zero-dep Node CLI   (branch: cli)
+├── cli/        ← Zero-dep Node CLI   (branch: cli)
+├── bundle/     ← Assembled output    (branch: bundle  — generated, do not edit)
+└── scripts/
+    └── build-bundle.mjs              ← assembles bundle/ (Node, zero deps)
+```
+
+## Bundle
+
+`bundle/` is **generated output** assembled by `scripts/build-bundle.mjs`.
+It contains everything needed to run Snip as a single deployable unit:
+
+| File | Source |
+|------|--------|
+| `server.js` | copied from `backend/` |
+| `cli.js` | copied from `cli/` |
+| `public/` | Angular SPA build output (from `frontend/dist/snip-frontend/browser/`) |
+| `.env` | `PUBLIC_DIR=./public` — Bun auto-loads it, enabling static-file serving |
+| `package.json` | `start: bun server.js`; no `"type"` field so `cli.js` runs under plain node |
+| `Dockerfile` | `FROM oven/bun:1-alpine` — ready for Docker / Railway |
+| `railway.json` | selects the Dockerfile builder |
+
+### Building the bundle
+
+```sh
+# Build + commit (no push) — safe to run locally
+node scripts/build-bundle.mjs
+
+# Build + commit + push — use in CI or to publish
+node scripts/build-bundle.mjs --push
+```
+
+**The script is a safe no-op**: if no source branch has new commits since the
+last run, `git commit` is skipped and nothing is pushed (with `--push`, any
+previously-committed-but-unpushed work is still pushed).
+
+### Update workflow
+
+```sh
+# 1. Commit & push changes on a source branch (e.g. backend/)
+cd backend && git commit -m "…" && git push && cd ..
+
+# 2. Rebuild the bundle and push everything
+node scripts/build-bundle.mjs --push
 ```
 
 ## API Contract
