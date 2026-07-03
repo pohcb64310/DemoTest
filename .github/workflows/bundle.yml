@@ -1,0 +1,45 @@
+name: Build bundle
+
+# NOTE: A push trigger is intentionally absent here.
+# GitHub executes a push-triggered workflow from the file on the branch that
+# was pushed.  This workflow file only exists on `main`, so a push to
+# `backend`, `frontend`, or `cli` would never find it and the workflow would
+# never fire.  The hourly schedule picks up any new commits on those branches
+# instead.
+
+on:
+  schedule:
+    - cron: '0 * * * *'    # every hour on the hour (UTC)
+  workflow_dispatch:        # allow manual runs from the Actions UI
+
+permissions:
+  contents: write           # needed to push updated bundle branch and main pointer
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main (with submodules)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          submodules: true
+          fetch-depth: 0    # full history so git can push/log correctly
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Set git identity and push credentials
+        run: |
+          git config --global user.name  "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Make the token available for pushes from *inside* submodule directories
+          # (actions/checkout configures it locally for the root repo; this covers subtrees)
+          git config --global \
+            url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf \
+            "https://github.com/"
+
+      - name: Build and push bundle
+        run: node scripts/build-bundle.mjs --push
